@@ -22,6 +22,12 @@ pl = dict(
     rep = lambda i: '<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PL%s" frameborder="0" allowfullscreen></iframe>'%i,
 )
 
+tls = dict(
+    exp = re.compile("(http://www.youtube.com/)|(http://youtube.com/)", re.S),
+    id = re.compile("(/www.youtube.com|/youtube.com)"),
+    rep = lambda i: 'https:/%s/'%i,
+)
+
 site = raw_input("Plone site ID (default Plone): ")
 if not site:
     site = "Plone"
@@ -34,8 +40,7 @@ res = cat.searchResults({'portal_type': portal_type})
 for x in res:
     obj = x.getObject()
     text = obj.getText()
-    repl = False
-    for typ in (vid, pl):
+    for typ in (vid, pl, tls):
         matches = typ['exp'].findall(text)
         if matches:
             repl = True
@@ -50,7 +55,7 @@ for x in res:
                 repl = typ['rep'](vidid)
                 print "   repl:", repr(repl)
                 text = text.replace(match[0], repl)
-    if repl:
+    if text != obj.getText():
         obj.setText(text)
         obj.reindexObject()
 
