@@ -12,20 +12,20 @@ import transaction
 
 vid = dict(
     exp = re.compile("(<object.*?youtube.com/v.*?</object>)|(<embed.*?youtube.com/v.*?</embed>)", re.S),
-    id = re.compile("youtube.com/v/(.+?)[\"&?]"),
+    id = re.compile("youtube.com/v/(.+?)[\"'&?]"),
     rep = lambda i: '<iframe width="560" height="315" src="https://www.youtube.com/embed/%s" frameborder="0" allowfullscreen></iframe>'%i,
 )
 
 pl = dict(
     exp = re.compile("(<object.*?youtube.com/p.*?</object>)|(<embed.*?youtube.com/p.*?</embed>)", re.S),
-    id = re.compile("youtube.com/p/(.+?)[\"&?]"),
+    id = re.compile("youtube.com/p/(.+?)[\"'&?]"),
     rep = lambda i: '<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PL%s" frameborder="0" allowfullscreen></iframe>'%i,
 )
 
 tls = dict(
-    exp = re.compile("(http://www.youtube.com/)|(http://youtube.com/)", re.S),
-    id = re.compile("(/www.youtube.com|/youtube.com)"),
-    rep = lambda i: 'https:/%s/'%i,
+    exp = re.compile("(http://(www\\.|)youtube.com/.*?[\"'])", re.S),
+    id = re.compile("http://(.*)"),
+    rep = lambda i: 'https://%s'%i,
 )
 
 site = raw_input("Plone site ID (default Plone): ")
